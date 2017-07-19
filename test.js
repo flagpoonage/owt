@@ -2,9 +2,17 @@
 
 var cons = require('./index');
 
+cons.on();
+
 console.log('Hello');
 
-cons.on();
+console.log('A little best of test information');
+console.log('Some JSON object', {
+  something: {
+    value: 'one',
+    other: 'two'
+  }
+});
 
 console.log('Yay!');
 
