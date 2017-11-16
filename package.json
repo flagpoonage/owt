@@ -1,6 +1,6 @@
 {
   "name": "owting",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Simple enhanced console logging",
   "main": "index.js",
   "dependencies": {
