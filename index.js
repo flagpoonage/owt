@@ -5,26 +5,48 @@ const OWTJ = require('owtj');
 const moment = require('moment');
 const chalk = require('chalk');
 
+const opt = {
+  active: false,
+  flatten: false,
+  time_format: 'HH:mm:ss DD/MM/YYYY Z'
+};
+
 const _ = (fn, tcolor, bcolor, ...args) => {
   if (!args[0]) {
     return;
   }
 
-  fn(chalk.rgb(210, 214, 216)(moment().format('HH:mm:ss DD/MM/YYYY Z') + ' -- ') + tcolor()(args[0]) + chalk.rgb(210, 214, 216)(' -- '));
+  let data = '';
 
-  args.slice(1).map(a => {
+  if (opt.time_format) {
+    data = chalk.rgb(210, 214, 216)(moment().format(opt.time_format) + ' -- ') + 
+      tcolor()(args[0]) + chalk.rgb(210, 214, 216)(' -- ');
+  }
+  else {
+    data = tcolor()(args[0]) + chalk.rgb(210, 214, 216)(' -- ');
+  }
+
+  let values = args.slice(1);
+  
+  values.map(a => {
     if (a instanceof Error) {
       return fn(bcolor()(a.stack));
     }
 
-    let output = OWTJ(a, null, 2);
-    fn(bcolor()(output ? output.replace(/"(\w+)"\s*:/g, '$1:') : null));
+    let arg_data = opt.flatten ? OWTJ(a) : OWTJ(a, null, 2);
+    arg_data = arg_data ? arg_data.replace(/"(\w+)"\s*:/g, '$1:') : null;
+
+    data += bcolor()(`${!opt.flatten ? '\n' : ''}${arg_data || ''}`);
   });
+
+  fn(data);
 };
 
 var output = {
   on: () => {
     const CS = new Console(process.stdout, process.stderr);
+
+    opt.active = true;
 
     global.console.log = (...args) => {
       _(CS.log, () => chalk.rgb(50, 209, 50), () => chalk.rgb(71, 197, 255), ...args);
@@ -35,8 +57,16 @@ var output = {
     };
   },
 
+  flatten: () => opt.flatten = true,
+
+  unflatten: () => opt.flatten = false,
+
+  timeFormat: format => opt.time_format = format,
+
   off: () => {
     const CS = new Console(process.stdout, process.stderr);
+
+    opt.active = false;
 
     global.console.log = CS.log
     global.console.error = CS.error;
