@@ -30,7 +30,7 @@ const _ = (fn, tcolor, bcolor, ...args) => {
   
   values.map(a => {
     if (a instanceof Error) {
-      return fn(bcolor()(a.stack));
+      data += bcolor()(`\n${a.stack}`);
     }
 
     let arg_data = opt.flatten ? OWTJ(a) : OWTJ(a, null, 2);
