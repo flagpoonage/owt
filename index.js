@@ -52,8 +52,16 @@ var output = {
       _(CS.log, () => chalk.rgb(50, 209, 50), () => chalk.rgb(71, 197, 255), ...args);
     },
 
+    global.console.info = (...args) => {
+      _(CS.log, () => chalk.rgb(68, 226, 249), () => chalk.rgb(163, 228, 238), ...args);
+    },
+    
+    global.console.warn = (...args) => {
+      _(CS.warn, () => chalk.rgb(255, 165, 0), () => chalk.rgb(255, 197, 71), ...args);
+    },
+
     global.console.error = (...args) => {
-      _(CS.error, () => chalk.rgb(209, 50, 50), () => chalk.rgb(255, 197,71), ...args);
+      _(CS.error, () => chalk.rgb(209, 50, 50), () => chalk.rgb(246,148,148), ...args);
     };
   },
 
@@ -69,6 +77,8 @@ var output = {
     opt.active = false;
 
     global.console.log = CS.log
+    global.console.info = CS.info;
+    global.console.warn = CS.warn;
     global.console.error = CS.error;
   }
 }
