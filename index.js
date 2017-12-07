@@ -49,7 +49,7 @@ var output = {
     opt.active = true;
 
     global.console.log = (...args) => {
-      _(CS.log, () => chalk.rgb(50, 209, 50), () => chalk.rgb(71, 197, 255), ...args);
+      _(CS.log, () => chalk.rgb(200, 200, 200), () => chalk.rgb(150, 150, 150), ...args);
     },
 
     global.console.info = (...args) => {
